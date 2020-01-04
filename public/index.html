@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Chat do Lucao brabo</title>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery-min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 
     <link rel="stylesheet" href="style.css"/>
 </head>
@@ -22,9 +22,22 @@
     <script type="text/javascript">
         var socket = io('http://localhost:3000');
 
+        function renderMessage(message) {
+            $('.messages').append('<div class="message">'+ message.author +'<strong></strong>: '+ message.message +'</div>');
+        }
+
+        socket.on('previousMessages', function(message){
+            for(message of messages){
+                renderMessage(message);
+            }
+        });
+
+        socket.on('reicevedMessage', function(message){
+            renderMessage(message);
+        });
+
         $('#chat').submit(function(event) {
             event.preventDefault();
-[]
 
             var author = $('input[name=username]').val();
             var message = $('input[name=message]').val();
@@ -34,6 +47,9 @@
                     author: author,
                     message: message,
                 };
+
+                renderMessage(messageObject);
+
                 socket.emit('sendMessage', messageObject);
             }
         });
