@@ -1,2 +1,2 @@
 # chat-real-time
-Chat in Real time using Node.js and Socket.io
+Chat in Real time using Node.js and Socket.io (not finished) 
